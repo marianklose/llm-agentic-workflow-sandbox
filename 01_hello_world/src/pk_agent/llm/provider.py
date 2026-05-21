@@ -31,6 +31,7 @@ def get_llm(temperature: float | None = None) -> BaseChatModel:
         A BaseChatModel instance with the standard LangChain interface:
         .invoke(), .stream(), .with_structured_output(), and so on.
     """
+    # init_chat_model directly comes from langchain
     return init_chat_model(
         model=settings.llm_model,
         temperature=temperature if temperature is not None else settings.llm_temperature,
