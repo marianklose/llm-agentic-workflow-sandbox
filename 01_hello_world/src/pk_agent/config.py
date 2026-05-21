@@ -1,5 +1,8 @@
 """
-Central configuration for the package.
+Central configuration for the package. Allows to populate its fields from
+the environmental variables in .env, and to have a single source of truth for all other
+settings. SettingsConfigDict tells Pydantic to look for .env three levels up from this file,
+which is the project root.
 
 Design split between this file and .env:
   - config.py holds *application behavior* — model choice, temperature,
@@ -43,5 +46,6 @@ class Settings(BaseSettings):
         case_sensitive=False,
     )
 
-
+# trigger to read the .env, apply defaults, validate types, construct a populated settings object
+# later we do from pk_agent.config import settings to use the values
 settings = Settings()
