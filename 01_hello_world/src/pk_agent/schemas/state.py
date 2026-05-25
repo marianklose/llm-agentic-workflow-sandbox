@@ -16,7 +16,7 @@ from typing import Optional
 from pydantic import BaseModel, ConfigDict, Field
 from .pk_model import PKParameters
 
-
+# define the AgentState class, which is the shared state object for all nodes in the workflow
 class AgentState(BaseModel):
     """Shared state object for all nodes in the workflow."""
 
@@ -33,4 +33,5 @@ class AgentState(BaseModel):
         description="Executive summary produced by the reporter node.",
     )
 
+    # add extra='forbid' to catch any typos or unexpected fields in the state updates
     model_config = ConfigDict(extra="forbid")
