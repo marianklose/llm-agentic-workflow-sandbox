@@ -18,27 +18,26 @@ to .env at that point. Until then, keep it here where it's visible.
 from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-
+# we define a pydantic settings model 
+# special type that allows to populate fields from env variables and .env files
 class Settings(BaseSettings):
     """Global application settings."""
 
-    # --- Application behavior (version-controlled in this file) ---
-
-    # LLM choice in "<provider>:<model>" format. init_chat_model
+    # defines LLM choice in "<provider>:<model>" format. init_chat_model
     # understands: anthropic, openai, google_genai, ollama, mistralai, ...
     llm_model: str = "anthropic:claude-sonnet-4-6"
     llm_temperature: float = 0.0
 
-    # --- Secrets and machine-specific values (loaded from .env) ---
-
+    # define secrets and machine-specific values, loaded from .env
     anthropic_api_key: str | None = None
     openai_api_key: str | None = None
 
-    # --- Computed paths ---
-
+    # compute path
     project_root: Path = Path(__file__).resolve().parents[2]
     data_dir: Path = project_root / "data"
 
+    # tell pytdantic to also look into the .env file, read it as utf8, 
+    # ignore unknown keys, and match variable names case-insensitively
     model_config = SettingsConfigDict(
         env_file=Path(__file__).resolve().parents[3] / ".env",
         env_file_encoding="utf-8",
@@ -46,6 +45,6 @@ class Settings(BaseSettings):
         case_sensitive=False,
     )
 
-# trigger to read the .env, apply defaults, validate types, construct a populated settings object
-# later we do from pk_agent.config import settings to use the values
+# reads the .env file, applies defaults and constructs a populated settings object
+# we will later do   from pk_agent.config import settings  to use these values
 settings = Settings()
