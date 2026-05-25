@@ -17,7 +17,7 @@ from langchain_core.language_models import BaseChatModel
 
 from ..config import settings
 
-
+# define the key function that returns a configured LLM instance, which can be used in the nodes
 def get_llm(temperature: float | None = None) -> BaseChatModel:
     """Return a configured chat model.
 
@@ -31,7 +31,10 @@ def get_llm(temperature: float | None = None) -> BaseChatModel:
         A BaseChatModel instance with the standard LangChain interface:
         .invoke(), .stream(), .with_structured_output(), and so on.
     """
+
     # init_chat_model directly comes from langchain
+    # can be later replaced with LiteLLM logic or pydantic-ai or 
+    # whatever we want to use for model calls
     return init_chat_model(
         model=settings.llm_model,
         temperature=temperature if temperature is not None else settings.llm_temperature,

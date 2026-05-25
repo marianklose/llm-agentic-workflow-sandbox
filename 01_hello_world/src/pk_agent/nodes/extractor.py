@@ -9,16 +9,18 @@ dictionary containing only the fields it wants to update. LangGraph
 handles merging the update back into the state.
 """
 from langchain_core.messages import HumanMessage, SystemMessage
-
 from ..llm.provider import get_llm
 from ..prompts.extractor import EXTRACTOR_SYSTEM_PROMPT
 from ..schemas.pk_model import PKParameters
 from ..schemas.state import AgentState
 
 
+# define key function for the extractor node
 def extract_parameters(state: AgentState) -> dict:
     """Read state.paper_content and extract PK parameters from it."""
 
+    # construct the llm instance, and tell it that we want structured output 
+    # in the form of a PKParameters object
     # .with_structured_output(PKParameters) tells the LLM that its
     # response must conform to the PKParameters schema. LangChain
     # translates the schema into the provider's tool-calling format,
@@ -27,6 +29,10 @@ def extract_parameters(state: AgentState) -> dict:
     # silently passed downstream.
     llm = get_llm().with_structured_output(PKParameters)
 
+    # invoke the model with the system prompt and the paper content as input
+    # we can see that we are passing the paper content from the state as input
+    # by passing a defined extractor system prompt, we can guide the model
+    # to perform its task in the way we want it to (prompt engineering)
     response: PKParameters = llm.invoke(
         [
             SystemMessage(content=EXTRACTOR_SYSTEM_PROMPT),
@@ -35,7 +41,7 @@ def extract_parameters(state: AgentState) -> dict:
     )
 
     # Return only the field we want to update. LangGraph merges this
-    # with the existing state — we never mutate the input state object
+    # with the existing state, we never mutate the input state object
     # directly. Treating nodes as pure functions makes them easy to
     # test and reason about.
     return {"extracted_parameters": response}
