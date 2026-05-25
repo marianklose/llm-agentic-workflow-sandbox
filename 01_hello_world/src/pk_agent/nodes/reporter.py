@@ -2,25 +2,26 @@
 Reporter node: produces a short executive summary.
 """
 from langchain_core.messages import HumanMessage, SystemMessage
-
 from ..llm.provider import get_llm
 from ..prompts.reporter import REPORTER_SYSTEM_PROMPT
 from ..schemas.state import AgentState
 
-
+# define key function for the reporter node
 def write_report(state: AgentState) -> dict:
     """Read state.extracted_parameters and write the executive summary."""
 
-    # Defensive check. With the current graph topology this branch
-    # cannot be reached, but if someone reorders nodes later the error
-    # message will point them straight at the cause.
+    # defensive check to ensure the extracted parameters are there
     if state.extracted_parameters is None:
         raise ValueError(
             "Reporter was invoked but extracted_parameters is None. "
             "Check the node order in graph/builder.py."
         )
 
+    # extract parameters
     p = state.extracted_parameters
+
+    # construct the user_message content based on the extracted parameters
+    # which will be passed to the LLM as input
     user_content = (
         f"Please write the executive summary for the following model:\n"
         f"- Drug: {p.drug_name}\n"
@@ -28,10 +29,10 @@ def write_report(state: AgentState) -> dict:
         f"- Clearance CL: {p.clearance} L/h"
     )
 
-    # Slightly higher temperature for prose. The extractor needs 0.0
-    # for deterministic structured output; here a small amount of
-    # variation produces more natural writing.
+    # get llm instance with slightly higher temperature
     llm = get_llm(temperature=0.2)
+
+    # invoke the model with the system prompt and the user message as input
     response = llm.invoke(
         [
             SystemMessage(content=REPORTER_SYSTEM_PROMPT),
@@ -39,4 +40,6 @@ def write_report(state: AgentState) -> dict:
         ]
     )
 
+    # return dict with the updated field
+    # which gets merged back into the state by LangGraph
     return {"report": response.content}
