@@ -20,7 +20,7 @@ A single Pydantic class serves three purposes at once:
 """
 from pydantic import BaseModel, ConfigDict, Field
 
-
+# define the PKParameters class (expected output of the extractor node)
 class PKParameters(BaseModel):
     """PK parameters of a one-compartment IV model."""
 
