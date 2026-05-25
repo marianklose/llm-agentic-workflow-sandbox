@@ -1,6 +1,6 @@
 # llm-agentic-workflow-sandbox
 
-My personal learning sandbox for building LLM-based agentic workflows in pharmacometrics. Each numbered folder is a self-contained example; later ones build on what earlier ones established.
+My personal learning sandbox for building LLM-based agentic workflows in pharmacometrics. Each numbered folder is a self-contained example; and examples will build on what earlier ones established.
 
 Built with [LangGraph](https://github.com/langchain-ai/langgraph) for orchestration, [LangChain](https://github.com/langchain-ai/langchain) for provider-agnostic model access, and [Pydantic](https://docs.pydantic.dev/) for structured outputs and state validation.
 
@@ -8,7 +8,7 @@ Built with [LangGraph](https://github.com/langchain-ai/langgraph) for orchestrat
 
 ## Examples
 
-- **`01_hello_world/`** — Two linear nodes (extractor → reporter) extracting PK parameters from a short paper. The foundational scaffolding everything else will build on. Blog post: [Building a Human-in-the-Loop LLM Agent Workflow for Pharmacometrics — Part 1](https://marian-klose.com/posts/hitl_llm_agentic_pmx_workflow/index.html).
+- **`01_hello_world/`** — Two linear nodes (extractor → reporter) extracting PK parameters from a short paper. The foundation everything else will build on. Blog post: [Building a Human-in-the-Loop LLM Agent Workflow for Pharmacometrics — Part 1](https://marian-klose.com/posts/hitl_llm_agentic_pmx_workflow/index.html).
 
 More to follow soon: human-in-the-loop interrupts, conditional routing, NONMEM integration, ...
 
